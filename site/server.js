@@ -12,6 +12,15 @@
 
 // Change the port to the default 80, if there are no permission issues and port
 // 80 isn't already in use. The root folder corresponds to the "/" url.
+const {startDatabase} = require('./database/mongo');
+const {insertTest, getTests} = require('./database/test');
+
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+
 let port = 8080;
 let root = "./public"
 
@@ -25,27 +34,61 @@ let fs = require("fs").promises;
 let OK = 200, NotFound = 404, BadType = 415, Error = 500;
 let types, paths;
 
-// Start the server:
-start();
+const app = express();
+app.use(helmet());
+app.use(bodyParser.json());
+app.use(cors());
+app.use(morgan('combined'));
+
+startDatabase();
+
+app.listen(port, () => {
+  console.log('listening on ' + port);
+})
+
+app.all('/', async(req, res) => {
+    if (req.method === 'GET') {
+        res.status(OK).sendFile(__dirname + '/public/index.html');
+    } else if (req.method === 'POST') {
+
+    } else if (req.method === 'PUT') {
+        
+    }
+});
+
+app.all('/test', async(req, res) => {
+    if (req.method === 'GET') {
+        res.status(OK).send(await getTests());
+    } else if (req.method === 'POST') {
+        res.status(OK).send(await insertTest({title: 'This is a test database record'}));
+
+    } else if (req.method === 'PUT') {
+        
+    }
+});
+
+
 
 // Check the site, giving quick feedback if it hasn't been set up properly.
 // Start the http service. Accept only requests from localhost, for security.
 // If successful, the handle function is called for each request.
 async function start() {
     try {
-        await fs.access(root);
-        await fs.access(root + "/index.html");
-        types = defineTypes();
-        paths = new Set();
-        paths.add("/");
-        let service = http.createServer(handle);
-        service.listen(port, "localhost");
-        let address = "http://localhost";
-        if (port != 80) address = address + ":" + port;
-        console.log("Server running at", address);
-    }
-    catch (err) { console.log(err); process.exit(1); }
+            await fs.access(root);
+            await fs.access(root + "/index.html");
+            types = defineTypes();
+            paths = new Set();
+            paths.add("/");
+            let service = http.createServer(handle);
+            service.listen(port, "localhost");
+            let address = "http://localhost";
+            if (port != 80) address = address + ":" + port;
+            console.log("Server running at", address);
+        }
+        catch (err) { console.log(err); process.exit(1); }
 }
+
+
 
 // Serve a request by delivering a file.
 async function handle(request, response) {
