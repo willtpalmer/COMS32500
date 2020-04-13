@@ -12,7 +12,7 @@
 
 // Change the port to the default 80, if there are no permission issues and port
 // 80 isn't already in use. The root folder corresponds to the "/" url.
-const {startDatabase} = require('./database/mongo');
+const {startDatabase} = require('./database/sqlite');
 const {insertTest, getTests} = require('./database/test');
 
 const express = require('express');
@@ -60,7 +60,7 @@ app.all('/test', async(req, res) => {
     if (req.method === 'GET') {
         res.status(OK).send(await getTests());
     } else if (req.method === 'POST') {
-        res.status(OK).send(await insertTest({title: 'This is a test database record'}));
+        res.status(OK).send(await insertTest('This is a test database record'));
 
     } else if (req.method === 'PUT') {
         
