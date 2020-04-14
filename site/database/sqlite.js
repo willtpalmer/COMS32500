@@ -2,12 +2,15 @@ const sqlite3 = require('sqlite3').verbose();
 let db = null;	
 
 async function startDatabase() {
-  	db = new sqlite3.Database('./database/test.db', (e) => {
-	  	if (e) {
-	    	return console.error(e.message);
-	  	}
-	  console.log('Connected to the in-memory SQlite database.');
+	return new Promise(resolve=>{
+		return db = new sqlite3.Database('./database/database.db', (e) => {
+		  	if (e) {
+		    	resolve(console.error(e.message));
+		  	}
+		  	resolve(console.log('Connected to SQlite database.'));
+		});
 	});
+  	
 }
 
 async function closeDatabase() {

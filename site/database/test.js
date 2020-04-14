@@ -20,7 +20,7 @@ async function insertTest(test) {
 
 async function getTests() {
 	const db = await getDatabase();
-	const sql = 'SELECT * FROM test';
+	const sql = "SELECT * FROM test"
 	return new Promise(resolve=>{
 		db.all(sql, function(e, res) {
 			if (e) {

@@ -12,8 +12,9 @@
 
 // Change the port to the default 80, if there are no permission issues and port
 // 80 isn't already in use. The root folder corresponds to the "/" url.
-const {startDatabase} = require('./database/sqlite');
+const {getDatabase} = require('./database/sqlite');
 const {insertTest, getTests} = require('./database/test');
+const {initialiseArtistsTable, insertArtist, dropArtistsTable, getArtists} = require('./database/artists');
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -36,15 +37,16 @@ let types, paths;
 
 const app = express();
 app.use(helmet());
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan('combined'));
 
-startDatabase();
-
 app.listen(port, () => {
   console.log('listening on ' + port);
 })
+
+cleanDatabase();
 
 app.all('/', async(req, res) => {
     if (req.method === 'GET') {
@@ -66,6 +68,30 @@ app.all('/test', async(req, res) => {
         
     }
 });
+
+app.all('/artists', async(req, res) => {
+    if (req.method === 'GET') {
+        res.status(OK).send(await getArtists());
+    } else if (req.method === 'POST') {
+        res.status(OK).send(await insertArtist(req.body.name, req.body.imageURL, req.body.bio));
+
+    } else if (req.method === 'PUT') {
+        
+    }
+});
+
+async function cleanDatabase() {
+    try{
+        await getDatabase();
+        console.log('Cleaning database...');
+        await dropArtistsTable();
+        await initialiseArtistsTable();
+        console.log('Database clean complete');
+    }
+    catch(e) {
+        console.log(e);
+    }
+}
 
 
 
