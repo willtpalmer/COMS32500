@@ -14,7 +14,9 @@
 // 80 isn't already in use. The root folder corresponds to the "/" url.
 const {getDatabase} = require('./database/sqlite');
 const {insertTest, getTests} = require('./database/test');
-const {initialiseArtistsTable, insertArtist, dropArtistsTable, getArtists} = require('./database/artists');
+const {initialiseArtistsTable, insertArtist, dropArtistsTable, getArtists, getArtist} = require('./database/artists');
+const {initialiseAlbumsTable, dropAlbumsTable, insertAlbum, getDiscography} = require('./database/albums');
+const {initialiseTracksTable, dropTracksTable, insertTrack} = require('./database/tracks');
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -80,16 +82,90 @@ app.all('/artists', async(req, res) => {
     }
 });
 
+app.all('/artists/:artistName', async(req, res) => {
+    if (req.method === 'GET') {
+        let artist = await getArtist(req.params.artistName);
+        if (artist !== undefined) {
+            res.status(OK).send(artist);
+        } else res.status(NotFound).send("Artist not found");
+        
+
+    } else if (req.method === 'POST') {
+
+    } else if (req.method === 'PUT') {
+        
+    }
+});
+
+app.all('/artists/:artistName/albums', async(req, res) => {
+    if (req.method === 'GET') {
+        let artist = await getArtist(req.params.artistName);
+        if (artist !== undefined) {
+            res.status(OK).send(await getDiscography(artist.id));
+        } else res.status(NotFound).send("Specified Artist not found");
+        
+
+    } else if (req.method === 'POST') {
+        let artist = (await getArtist(req.params.artistName));
+        if (artist !== undefined) {
+            let albumId = await insertAlbum(req.body.title, req.body.releaseDate, req.body.imageURL, artist.id);
+            res.status(OK).send('A row has been inserted into the albums table with ID: '+albumId);
+
+
+        } else res.status(NotFound).send("Specified Artist not found");
+
+    } else if (req.method === 'PUT') {
+        
+    }
+});
+
+app.all('/albums', async(req, res) => {
+    if (req.method === 'GET') {
+
+    } else if (req.method === 'POST') {
+        
+        
+
+    } else if (req.method === 'PUT') {
+        
+    }
+});
+
 async function cleanDatabase() {
     try{
         await getDatabase();
         console.log('Cleaning database...');
         await dropArtistsTable();
         await initialiseArtistsTable();
+        await dropAlbumsTable();
+        await initialiseAlbumsTable();
+        await dropTracksTable();
+        await initialiseTracksTable();
         console.log('Database clean complete');
+
+        insertTestData();
     }
     catch(e) {
         console.log(e);
+    }
+}
+
+async function insertTestData() {
+    try {
+        await insertArtist("Artist1", "/images/example.jpg", "Artist1Artist1Artist1");
+        let artistId = (await getArtist("Artist1")).id;
+        await insertAlbum("My first album", "2020-01-01", "/images/example1.jpg", artistId);
+        await insertAlbum("My second album", "2020-02-01", "/images/example2.jpg", artistId);
+        let albumId = await insertAlbum("My third album", "2020-03-01", "/images/example3.jpg", artistId);
+        await insertTrack("Track 1", 1, albumId);
+        await insertTrack("Track 2", 2, albumId);
+        await insertTrack("Track 3", 3, albumId);
+        await insertTrack("Track 4", 4, albumId);
+
+
+    }
+    catch(e) {
+
     }
 }
 

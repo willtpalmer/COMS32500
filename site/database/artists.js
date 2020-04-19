@@ -4,10 +4,10 @@ async function initialiseArtistsTable() {
 	const db = await getDatabase();
 	const prepSQL = db.prepare('CREATE TABLE IF NOT EXISTS artists (\
 									id INTEGER PRIMARY KEY,\
-									name TEXT NOT NULL,\
+									name TEXT NOT NULL UNIQUE,\
 									imageURL TEXT,\
 									biography TEXT \
-								);');
+								)');
 	return new Promise(resolve=>{
 		prepSQL.run((e)=>{
 			if (e) resolve(console.log(e.message));
@@ -30,10 +30,10 @@ async function dropArtistsTable() {
 async function insertArtist(name, imageURL, bio) {
 	const db = await getDatabase();
 	const prepSQL = db.prepare('INSERT INTO artists(name, imageURL, biography)\
-				 				VALUES(?,?,?);')
+				 				VALUES(?,?,?)');
 	return new Promise(resolve=>{
 		prepSQL.run([name, imageURL, bio], (e)=>{
-    		if (e) resolve(console.log(e.message));
+    		if (e) console.log(e.message);
     		else resolve(console.log('A row has been inserted into the artists table'));
   		});
   	});
@@ -41,7 +41,7 @@ async function insertArtist(name, imageURL, bio) {
 
 async function getArtists() {
 	const db = await getDatabase();
-	const prepSQL = db.prepare('SELECT * FROM artists;')
+	const prepSQL = db.prepare('SELECT * FROM artists');
 	return new Promise(resolve=>{
 		prepSQL.all((e, res)=>{
     		if (e) resolve(console.log(e.message));
@@ -50,6 +50,21 @@ async function getArtists() {
   	});
 }
 
+async function getArtist(artistName) {
+	const db = await getDatabase();
+	const prepSQL = db.prepare('SELECT * \
+								FROM artists\
+								WHERE name = ?');
+	return new Promise(resolve=>{
+		prepSQL.get([artistName],(e, res)=>{
+    		if (e) resolve(console.log(e.message));
+    		else resolve(res);
+  		});
+  	});
+}
+
+
+
 
 
 module.exports = {
@@ -57,4 +72,5 @@ module.exports = {
 	insertArtist,
 	dropArtistsTable,
 	getArtists,
+	getArtist,
 };
