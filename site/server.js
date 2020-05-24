@@ -38,11 +38,14 @@ let OK = 200, NotFound = 404, BadType = 415, Error = 500;
 let types, paths;
 
 const app = express();
+app.use(express.static("public"));
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan('combined'));
+
+app.set('view engine', 'ejs');
 
 app.listen(port, () => {
   console.log('listening on ' + port);
@@ -52,7 +55,14 @@ cleanDatabase();
 
 app.all('/', async(req, res) => {
     if (req.method === 'GET') {
-        res.status(OK).sendFile(__dirname + '/public/index.html');
+        //res.status(OK).sendFile(__dirname + '/public/index.html');
+        res.render('index', {
+            test: "OUTOUT"
+        });
+        /*res.render("/public/index.html", {
+            drinks: "drinks",
+            tagline: "tagline"
+        });*/
     } else if (req.method === 'POST') {
 
     } else if (req.method === 'PUT') {
@@ -86,9 +96,14 @@ app.all('/artists/:artistName', async(req, res) => {
     if (req.method === 'GET') {
         let artist = await getArtist(req.params.artistName);
         if (artist !== undefined) {
-            res.status(OK).send(artist);
+            let discography = await getDiscography(artist.id)
+            let discObj = JSON.stringify(discography)
+            res.status(OK).render('artist', {
+                artist: artist,
+                discography: discography
+            });
+
         } else res.status(NotFound).send("Artist not found");
-        
 
     } else if (req.method === 'POST') {
 
@@ -152,15 +167,23 @@ async function cleanDatabase() {
 
 async function insertTestData() {
     try {
-        await insertArtist("Artist1", "/images/example.jpg", "Artist1Artist1Artist1");
-        let artistId = (await getArtist("Artist1")).id;
-        await insertAlbum("My first album", "2020-01-01", "/images/example1.jpg", artistId);
-        await insertAlbum("My second album", "2020-02-01", "/images/example2.jpg", artistId);
-        let albumId = await insertAlbum("My third album", "2020-03-01", "/images/example3.jpg", artistId);
-        await insertTrack("Track 1", 1, albumId);
-        await insertTrack("Track 2", 2, albumId);
-        await insertTrack("Track 3", 3, albumId);
-        await insertTrack("Track 4", 4, albumId);
+        await insertArtist("Polyphia", "/images/artists/polyphia.jpg", "Hailing from the quiet suburbs of Plano, Texas, progressive rock outfit, Polyphia, are anything but mild-mannered. With adistinctly thought-outand well-orchestrated sound, the quartet pummels out blistering blast beats, and an onslaught of guitarshreds that blends, seamlessly, withmelodic grooves and a humble intensity that never wears on the ear. Capitalizing on a \"Standard of Excellence\", the band wishes to inspire those who listen with their doctrine of uncompromised work ethic and self-motivated success");
+        let artistId = (await getArtist("Polyphia")).id;
+        await insertAlbum("New Levels New Devils", "2018", "/images/albums/polyphia--new-levels-new-devils.jpg", artistId);
+        await insertAlbum("Renaissance", "2016", "/images/albums/polyphia--renaissance.jpg", artistId);
+        await insertAlbum("Muse", "2014", "/images/albums/polyphia--muse.jpg", artistId);
+        //let albumId = await insertAlbum("My third album", "2020-03-01", "/images/example3.jpg", artistId);
+        //await insertTrack("Track 1", 1, albumId);
+        //await insertTrack("Track 2", 2, albumId);
+        //await insertTrack("Track 3", 3, albumId);
+        //await insertTrack("Track 4", 4, albumId);
+
+        await insertArtist("Animals-As-Leaders", "/images/artists/animals-as-leaders.jpg", "Animals as Leaders is an American, Washington, D.C.–based instrumental progressive metal band, formed by guitarist Tosin Abasi in 2007,which now includes guitarist Javier Reyes and drummer Matt Garstka. Their self-titled debut album was released in April 2009 byProstheticRecords. Tosin Abasi and Javier Reyes are also members of the supergroup T.R.A.M alongside former The Mars Volta wind instrumentalist AdrianTerrazas and Suicidal Tendencies drummer Eric Moore. Their second album, entitled Weightless was released on November 8th, 2011 in the US, November 4th in Europe,and November 7th in theUK. It includes Abasi and Reyes on guitars, and Navene Koperweis on drums. The band released their third album, The Joy Of Motion, their first album with drummer Matt Garstka,on March 25, 2014");
+        artistId = (await getArtist("Animals-As-Leaders")).id;
+        await insertAlbum("The Madness of Many", "2016", "/images/albums/animals-as-leaders--the-madness-of-many.jpg", artistId);
+        await insertAlbum("The Joy of Motion", "2014", "/images/albums/animals-as-leaders--the-joy-of-motion.jpg", artistId);
+        await insertAlbum("Weightless", "2011", "/images/albums/animals-as-leaders--weightless.jpg", artistId);
+        await insertAlbum("Animals as Leaders", "2009", "/images/albums/animals-as-leaders--animals-as-leaders.jpg", artistId);
 
 
     }

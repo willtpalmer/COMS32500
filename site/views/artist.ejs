@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Artist Page</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="stylesheets/bandstyle.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+</head>
+    
+<body>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="#about">About</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#discography">Discography</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#photos">Photos</a>
+        </li>
+    </ul>
+</nav>
+
+<!--<div class="jumbotron jumbotron-fluid bg-dark text-white">-->
+<div class="container-fluid bg-dark text-white" id="about">
+    <img src="<%= artist.imageURL %>" class="rounded-circle mx-auto d-block" alt="Cinque Terre" width="200" height="200">
+    <h1 class="display-4 text-center"><%= artist.name.replace(/-/g," ") %></h1>
+    <p class="text-white-50 text-center"><%= artist.biography %></p>
+</div>
+<!--</div>-->
+
+<div class="container-fluid bg-dark text-white" id="discography">
+    <h1 class="display-4 text-center">Discography</h1>
+    <div class="card-deck" id="cards">
+    </div>
+</div>
+
+<script>
+    let cards = document.getElementById("cards");
+    let card, img, overlay, div;
+    let title, imgURL;
+    <% for(let j=0; j<discography.length; j++) { %>
+        title = "<%= discography[0].title %>";
+        card = document.createElement('div');
+        card.className = "card";
+        
+        img = document.createElement('img');
+        img.className = "card-img";
+        img.src = "<%= discography[j].imageURL %>";
+
+        div = document.createElement('div');
+        div.className = "text font-italic";
+        div.innerHTML = "<%= discography[j].title %>";
+
+        overlay = document.createElement('div');
+        overlay.className = "overlay";
+
+        overlay.appendChild(div);
+        card.appendChild(img);
+        card.appendChild(overlay);
+        cards.appendChild(card);        
+    <%}%>
+
+</script>
+    
+<div class="container-fluid bg-dark text-white" id="photos">
+
+  <h1 class="display-4 text-center">Photos</h1>
+
+<!--  <hr class="mt-2 mb-5">-->
+
+  <div class="row text-center text-lg-left">
+
+    <div class="col-lg-3 col-md-4 col-6">
+        <a class="d-block mb-4 h-100">
+            <img href="https://www.ibanez.com/common/product_artist_file/file/a_main_TimHenson.jpg" data-fancybox="gallery" class="img-fluid img-thumbnail" src="https://www.ibanez.com/common/product_artist_file/file/a_main_TimHenson.jpg" alt="Tim">
+        </a>
+    </div>
+      
+    <div class="col-lg-3 col-md-4 col-6">
+        <a href="https://cdn.mos.cms.futurecdn.net/UPgdS6fMubwvKBfNtbosPZ-1200-80.jpg" data-fancybox="gallery" class="d-block mb-4 h-100">
+            <img class="img-fluid img-thumbnail" src="https://cdn.mos.cms.futurecdn.net/UPgdS6fMubwvKBfNtbosPZ-1200-80.jpg" alt="Tim & Scotty">
+        </a>
+    </div>
+      
+    <div class="col-lg-3 col-md-4 col-6">
+        <a href="https://pbs.twimg.com/profile_images/1067959868760498176/ErBx_5El_400x400.jpg" data-fancybox="gallery" class="d-block mb-4 h-100">
+            <img class="img-fluid img-thumbnail" src="https://pbs.twimg.com/profile_images/1067959868760498176/ErBx_5El_400x400.jpg" alt="">
+        </a>
+    </div>
+    <div class="col-lg-3 col-md-4 col-6">
+        <a href="https://images-na.ssl-images-amazon.com/images/I/C1Crdpt7iBS._SL1000_.png" data-fancybox="gallery" class="d-block mb-4 h-100">
+            <img class="img-fluid img-thumbnail" src="https://images-na.ssl-images-amazon.com/images/I/C1Crdpt7iBS._SL1000_.png" alt="">
+        </a>
+    </div>
+    <div class="col-lg-3 col-md-4 col-6">
+        <a href="https://i.ticketweb.com/i/00/09/65/51/89_Edp.jpg?v=4" data-fancybox="gallery" class="d-block mb-4 h-100">
+            <img class="img-fluid img-thumbnail" src="https://i.ticketweb.com/i/00/09/65/51/89_Edp.jpg?v=4" alt="">
+        </a>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+$(document).ready(function(){
+  $('body').scrollspy({target: ".navbar", offset: 100});   
+});
+
+$('.navbar li a').click(function(event) {
+    event.preventDefault();
+    $($(this).attr('href'))[0].scrollIntoView();
+    scrollBy(0, -80);
+});
+</script>
+    
+</body>
+</html>
