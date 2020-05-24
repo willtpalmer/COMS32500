@@ -35,15 +35,13 @@ async function insertAlbum(title, releaseDate, imageURL, artist_id) {
 	const db = await getDatabase();
 	const prepSQL = db.prepare('INSERT INTO albums(title, releaseDate, imageURL, artist_id)\
 				 				VALUES(?,?,?,?)');
-	await new Promise(resolve=>{
-		prepSQL.run([title, releaseDate, imageURL, artist_id], (e)=>{
-    		if (e) resolve(console.log(e.message));
-    		else resolve(console.log('A row has been inserted into the albums table'));
-  		});
+	await prepSQL.run([title, releaseDate, imageURL, artist_id], (e)=>{
+		if (e) console.log(e.message);
+		else console.log('A row has been inserted into the albums table');
 	});
-	const prepSQL2 = db.prepare('SELECT last_insert_rowid()');
+	const prepSQL1 = db.prepare('SELECT last_insert_rowid()');
 	return new Promise(resolve=>{
-	prepSQL2.get((e, res)=>{
+	prepSQL1.get((e, res)=>{
 		if (e) resolve(console.log(e.message));
 		else resolve(res['last_insert_rowid()']);
 		});
