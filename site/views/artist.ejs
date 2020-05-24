@@ -57,7 +57,6 @@
     let card, img, overlay, div;
     let title, imgURL;
     <% for(let j=0; j<discography.length; j++) { %>
-        title = "<%= discography[0].title %>";
         card = document.createElement('div');
         card.className = "card";
         
@@ -67,7 +66,7 @@
 
         div = document.createElement('div');
         div.className = "text font-italic";
-        div.innerHTML = "<%= discography[j].title %>";
+        div.innerHTML = "<%= discography[j].title %>"+"<br>(<%= discography[j].releaseDate %>)";
 
         overlay = document.createElement('div');
         overlay.className = "overlay";
@@ -86,39 +85,35 @@
 
 <!--  <hr class="mt-2 mb-5">-->
 
-  <div class="row text-center text-lg-left">
-
-    <div class="col-lg-3 col-md-4 col-6">
-        <a class="d-block mb-4 h-100">
-            <img href="https://www.ibanez.com/common/product_artist_file/file/a_main_TimHenson.jpg" data-fancybox="gallery" class="img-fluid img-thumbnail" src="https://www.ibanez.com/common/product_artist_file/file/a_main_TimHenson.jpg" alt="Tim">
-        </a>
-    </div>
-      
-    <div class="col-lg-3 col-md-4 col-6">
-        <a href="https://cdn.mos.cms.futurecdn.net/UPgdS6fMubwvKBfNtbosPZ-1200-80.jpg" data-fancybox="gallery" class="d-block mb-4 h-100">
-            <img class="img-fluid img-thumbnail" src="https://cdn.mos.cms.futurecdn.net/UPgdS6fMubwvKBfNtbosPZ-1200-80.jpg" alt="Tim & Scotty">
-        </a>
-    </div>
-      
-    <div class="col-lg-3 col-md-4 col-6">
-        <a href="https://pbs.twimg.com/profile_images/1067959868760498176/ErBx_5El_400x400.jpg" data-fancybox="gallery" class="d-block mb-4 h-100">
-            <img class="img-fluid img-thumbnail" src="https://pbs.twimg.com/profile_images/1067959868760498176/ErBx_5El_400x400.jpg" alt="">
-        </a>
-    </div>
-    <div class="col-lg-3 col-md-4 col-6">
-        <a href="https://images-na.ssl-images-amazon.com/images/I/C1Crdpt7iBS._SL1000_.png" data-fancybox="gallery" class="d-block mb-4 h-100">
-            <img class="img-fluid img-thumbnail" src="https://images-na.ssl-images-amazon.com/images/I/C1Crdpt7iBS._SL1000_.png" alt="">
-        </a>
-    </div>
-    <div class="col-lg-3 col-md-4 col-6">
-        <a href="https://i.ticketweb.com/i/00/09/65/51/89_Edp.jpg?v=4" data-fancybox="gallery" class="d-block mb-4 h-100">
-            <img class="img-fluid img-thumbnail" src="https://i.ticketweb.com/i/00/09/65/51/89_Edp.jpg?v=4" alt="">
-        </a>
-    </div>
-
+  <div class="row text-center text-lg-left" id="gallery">
   </div>
 
 </div>
+
+<script>
+    let gallery = document.getElementById("gallery");
+    let a;
+
+    <% for(let j=0; j<images.length; j++) { %>
+        img = document.createElement('img');
+        img.className = "img-fluid img-thumbnail";
+        img.src = "<%= images[j].url %>";
+
+        a = document.createElement('a');
+        a.className = "d-block mb-4 h-100";
+        a.href = "<%= images[j].url %>";
+        a.setAttribute("data-fancybox", "gallery");
+        
+        div = document.createElement('div');
+        div.className = "col-lg-3 col-md-4 col-6";
+
+        a.appendChild(img);
+        div.appendChild(a);
+        gallery.appendChild(div);
+
+    <%}%>
+
+</script>
 
 <script>
 $(document).ready(function(){

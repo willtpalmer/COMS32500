@@ -17,6 +17,7 @@ const {insertTest, getTests} = require('./database/test');
 const {initialiseArtistsTable, insertArtist, dropArtistsTable, getArtists, getArtist} = require('./database/artists');
 const {initialiseAlbumsTable, dropAlbumsTable, insertAlbum, getDiscography} = require('./database/albums');
 const {initialiseTracksTable, dropTracksTable, insertTrack} = require('./database/tracks');
+const {initialiseImagesTable, dropImagesTable, insertImage, getImages} = require('./database/images');
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -96,11 +97,12 @@ app.all('/artists/:artistName', async(req, res) => {
     if (req.method === 'GET') {
         let artist = await getArtist(req.params.artistName);
         if (artist !== undefined) {
-            let discography = await getDiscography(artist.id)
-            let discObj = JSON.stringify(discography)
+            let discography = await getDiscography(artist.id);
+            let images = await getImages(artist.id);
             res.status(OK).render('artist', {
                 artist: artist,
-                discography: discography
+                discography: discography,
+                images: images
             });
 
         } else res.status(NotFound).send("Artist not found");
@@ -156,6 +158,8 @@ async function cleanDatabase() {
         await initialiseAlbumsTable();
         await dropTracksTable();
         await initialiseTracksTable();
+        await dropImagesTable();
+        await initialiseImagesTable();
         console.log('Database clean complete');
 
         insertTestData();
@@ -167,23 +171,31 @@ async function cleanDatabase() {
 
 async function insertTestData() {
     try {
-        await insertArtist("Polyphia", "/images/artists/polyphia.jpg", "Hailing from the quiet suburbs of Plano, Texas, progressive rock outfit, Polyphia, are anything but mild-mannered. With adistinctly thought-outand well-orchestrated sound, the quartet pummels out blistering blast beats, and an onslaught of guitarshreds that blends, seamlessly, withmelodic grooves and a humble intensity that never wears on the ear. Capitalizing on a \"Standard of Excellence\", the band wishes to inspire those who listen with their doctrine of uncompromised work ethic and self-motivated success");
+        await insertArtist("Polyphia", "/images/artists/Polyphia/polyphia.jpg", "Hailing from the quiet suburbs of Plano, Texas, progressive rock outfit, Polyphia, are anything but mild-mannered. With adistinctly thought-outand well-orchestrated sound, the quartet pummels out blistering blast beats, and an onslaught of guitarshreds that blends, seamlessly, withmelodic grooves and a humble intensity that never wears on the ear. Capitalizing on a \"Standard of Excellence\", the band wishes to inspire those who listen with their doctrine of uncompromised work ethic and self-motivated success");
         let artistId = (await getArtist("Polyphia")).id;
         await insertAlbum("New Levels New Devils", "2018", "/images/albums/polyphia--new-levels-new-devils.jpg", artistId);
         await insertAlbum("Renaissance", "2016", "/images/albums/polyphia--renaissance.jpg", artistId);
         await insertAlbum("Muse", "2014", "/images/albums/polyphia--muse.jpg", artistId);
+        await insertImage("/images/artists/Polyphia/polyphia-1.jpg", artistId);
+        await insertImage("/images/artists/Polyphia/polyphia-2.jpg", artistId);
+        await insertImage("/images/artists/Polyphia/polyphia-3.jpg", artistId);
+        await insertImage("/images/artists/Polyphia/polyphia-4.jpg", artistId);
+        await insertImage("/images/artists/Polyphia/polyphia-5.jpg", artistId);
         //let albumId = await insertAlbum("My third album", "2020-03-01", "/images/example3.jpg", artistId);
         //await insertTrack("Track 1", 1, albumId);
         //await insertTrack("Track 2", 2, albumId);
         //await insertTrack("Track 3", 3, albumId);
         //await insertTrack("Track 4", 4, albumId);
 
-        await insertArtist("Animals-As-Leaders", "/images/artists/animals-as-leaders.jpg", "Animals as Leaders is an American, Washington, D.C.–based instrumental progressive metal band, formed by guitarist Tosin Abasi in 2007,which now includes guitarist Javier Reyes and drummer Matt Garstka. Their self-titled debut album was released in April 2009 byProstheticRecords. Tosin Abasi and Javier Reyes are also members of the supergroup T.R.A.M alongside former The Mars Volta wind instrumentalist AdrianTerrazas and Suicidal Tendencies drummer Eric Moore. Their second album, entitled Weightless was released on November 8th, 2011 in the US, November 4th in Europe,and November 7th in theUK. It includes Abasi and Reyes on guitars, and Navene Koperweis on drums. The band released their third album, The Joy Of Motion, their first album with drummer Matt Garstka,on March 25, 2014");
+        await insertArtist("Animals-As-Leaders", "/images/artists/Animals-As-Leaders/animals-as-leaders.jpg", "Animals as Leaders is an American, Washington, D.C.–based instrumental progressive metal band, formed by guitarist Tosin Abasi in 2007,which now includes guitarist Javier Reyes and drummer Matt Garstka. Their self-titled debut album was released in April 2009 byProstheticRecords. Tosin Abasi and Javier Reyes are also members of the supergroup T.R.A.M alongside former The Mars Volta wind instrumentalist AdrianTerrazas and Suicidal Tendencies drummer Eric Moore. Their second album, entitled Weightless was released on November 8th, 2011 in the US, November 4th in Europe,and November 7th in theUK. It includes Abasi and Reyes on guitars, and Navene Koperweis on drums. The band released their third album, The Joy Of Motion, their first album with drummer Matt Garstka,on March 25, 2014");
         artistId = (await getArtist("Animals-As-Leaders")).id;
         await insertAlbum("The Madness of Many", "2016", "/images/albums/animals-as-leaders--the-madness-of-many.jpg", artistId);
         await insertAlbum("The Joy of Motion", "2014", "/images/albums/animals-as-leaders--the-joy-of-motion.jpg", artistId);
         await insertAlbum("Weightless", "2011", "/images/albums/animals-as-leaders--weightless.jpg", artistId);
         await insertAlbum("Animals as Leaders", "2009", "/images/albums/animals-as-leaders--animals-as-leaders.jpg", artistId);
+        await insertImage("/images/artists/Animals-As-Leaders/animals-as-leaders-1.jpg", artistId);
+        await insertImage("/images/artists/Animals-As-Leaders/animals-as-leaders-2.jpg", artistId);
+        await insertImage("/images/artists/Animals-As-Leaders/animals-as-leaders-3.jpg", artistId);
 
 
     }
