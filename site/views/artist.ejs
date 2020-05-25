@@ -24,19 +24,28 @@
     
 <body>
 
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-    <ul class="navbar-nav">
+<!--<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">-->
+    <ul class="nav navbar nav-pills navbar-expand-sm fixed-top">
         <li class="nav-item">
-            <a class="nav-link" href="#about">About</a>
+            <a class="nav-link" href="#about">
+<!--                <svg width="100" height="100"></svg>-->
+            <img src="/images/icons/book.svg" alt="book"/>
+            </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#discography">Discography</a>
+            <a class="nav-link" href="#discography">
+<!--                <svg width="100" height="100"></svg>-->
+            <img src="/images/icons/note.svg" alt="note"/>
+            </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#photos">Photos</a>
+            <a class="nav-link" href="#photos">
+<!--                <svg width="100" height="100"></svg>-->
+            <img src="/images/icons/photo.svg" alt="note"/>
+            </a>
         </li>
     </ul>
-</nav>
+<!--</nav>-->
 
 <!--<div class="jumbotron jumbotron-fluid bg-dark text-white">-->
 <div class="container-fluid bg-dark text-white" id="about">
@@ -53,12 +62,15 @@
 </div>
 
 <script>
+  let id = 0;
     let cards = document.getElementById("cards");
     let card, img, overlay, div;
     let title, imgURL;
     <% for(let j=0; j<discography.length; j++) { %>
+        title = "<%= discography[0].title %>";
         card = document.createElement('div');
         card.className = "card";
+        card.id = id;
         
         img = document.createElement('img');
         img.className = "card-img";
@@ -74,7 +86,9 @@
         overlay.appendChild(div);
         card.appendChild(img);
         card.appendChild(overlay);
-        cards.appendChild(card);        
+        cards.appendChild(card);
+
+        id++;       
     <%}%>
 
 </script>
@@ -114,10 +128,45 @@
     <%}%>
 
 </script>
+    
+<script>
+let cardID;
+let baseURL = 'https://open.spotify.com/embed/album/';
+let urls = [];
+<% for(let j=0; j<discography.length; j++) { %>
+    urls.push("<%= discography[j].spotifyURL %>")
+<%}%>
+
+if (screen && screen.width < 900) {
+    $(document).ready(function() {
+       $('.card').popover({ 
+           html : true,
+           placement: 'top',
+           content: function() {
+                cardID = $(this)[0].id
+                console.log(cardID)
+               return $('<iframe width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>').attr('src', src)
+               }
+        });
+    });
+}
+else {
+    $(document).ready(function() {
+       $('.card').popover({ 
+           html : true,
+//           placement : 'left',
+           content: function() {
+                cardID= $(this)[0].id
+               return $('<iframe width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>').attr('src', baseURL+urls[cardID])
+               }
+        });
+    });
+}
+</script>
 
 <script>
 $(document).ready(function(){
-  $('body').scrollspy({target: ".navbar", offset: 100});   
+  $('body').scrollspy({target: ".navbar", offset: 110});   
 });
 
 $('.navbar li a').click(function(event) {

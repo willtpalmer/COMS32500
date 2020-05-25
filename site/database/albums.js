@@ -7,6 +7,7 @@ async function initialiseAlbumsTable() {
 									title TEXT NOT NULL,\
 									releaseDate DATE,\
 									imageURL TEXT,\
+									spotifyURL TEXT,\
 									artist_id INTEGER NOT NULL,\
 									FOREIGN KEY (artist_id)\
 										REFERENCES artists(id)\
@@ -31,11 +32,11 @@ async function dropAlbumsTable() {
 }
 
 
-async function insertAlbum(title, releaseDate, imageURL, artist_id) {
+async function insertAlbum(title, releaseDate, imageURL, artist_id, spotifyURL="") {
 	const db = await getDatabase();
-	const prepSQL = db.prepare('INSERT INTO albums(title, releaseDate, imageURL, artist_id)\
-				 				VALUES(?,?,?,?)');
-	await prepSQL.run([title, releaseDate, imageURL, artist_id], (e)=>{
+	const prepSQL = db.prepare('INSERT INTO albums(title, releaseDate, imageURL, spotifyURL, artist_id)\
+				 				VALUES(?,?,?,?,?)');
+	await prepSQL.run([title, releaseDate, imageURL, spotifyURL, artist_id], (e)=>{
 		if (e) console.log(e.message);
 		else console.log('A row has been inserted into the albums table');
 	});

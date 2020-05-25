@@ -60,10 +60,6 @@ app.all('/', async(req, res) => {
         res.render('index', {
             test: "OUTOUT"
         });
-        /*res.render("/public/index.html", {
-            drinks: "drinks",
-            tagline: "tagline"
-        });*/
     } else if (req.method === 'POST') {
 
     } else if (req.method === 'PUT') {
@@ -173,9 +169,9 @@ async function insertTestData() {
     try {
         await insertArtist("Polyphia", "/images/artists/Polyphia/polyphia.jpg", "Hailing from the quiet suburbs of Plano, Texas, progressive rock outfit, Polyphia, are anything but mild-mannered. With adistinctly thought-outand well-orchestrated sound, the quartet pummels out blistering blast beats, and an onslaught of guitarshreds that blends, seamlessly, withmelodic grooves and a humble intensity that never wears on the ear. Capitalizing on a \"Standard of Excellence\", the band wishes to inspire those who listen with their doctrine of uncompromised work ethic and self-motivated success");
         let artistId = (await getArtist("Polyphia")).id;
-        await insertAlbum("New Levels New Devils", "2018", "/images/albums/polyphia--new-levels-new-devils.jpg", artistId);
-        await insertAlbum("Renaissance", "2016", "/images/albums/polyphia--renaissance.jpg", artistId);
-        await insertAlbum("Muse", "2014", "/images/albums/polyphia--muse.jpg", artistId);
+        await insertAlbum("New Levels New Devils", "2018", "/images/albums/polyphia--new-levels-new-devils.jpg", artistId, "1JYk1k73qSbXCCCciopZH7");
+        await insertAlbum("Renaissance", "2016", "/images/albums/polyphia--renaissance.jpg", artistId, "1Ki56K82avE7nTkZEyVIE7",);
+        await insertAlbum("Muse", "2014", "/images/albums/polyphia--muse.jpg", artistId, "1yTULCIrJxzeaJeaV5BXqp");
         await insertImage("/images/artists/Polyphia/polyphia-1.jpg", artistId);
         await insertImage("/images/artists/Polyphia/polyphia-2.jpg", artistId);
         await insertImage("/images/artists/Polyphia/polyphia-3.jpg", artistId);
@@ -189,10 +185,10 @@ async function insertTestData() {
 
         await insertArtist("Animals-As-Leaders", "/images/artists/Animals-As-Leaders/animals-as-leaders.jpg", "Animals as Leaders is an American, Washington, D.C.–based instrumental progressive metal band, formed by guitarist Tosin Abasi in 2007,which now includes guitarist Javier Reyes and drummer Matt Garstka. Their self-titled debut album was released in April 2009 byProstheticRecords. Tosin Abasi and Javier Reyes are also members of the supergroup T.R.A.M alongside former The Mars Volta wind instrumentalist AdrianTerrazas and Suicidal Tendencies drummer Eric Moore. Their second album, entitled Weightless was released on November 8th, 2011 in the US, November 4th in Europe,and November 7th in theUK. It includes Abasi and Reyes on guitars, and Navene Koperweis on drums. The band released their third album, The Joy Of Motion, their first album with drummer Matt Garstka,on March 25, 2014");
         artistId = (await getArtist("Animals-As-Leaders")).id;
-        await insertAlbum("The Madness of Many", "2016", "/images/albums/animals-as-leaders--the-madness-of-many.jpg", artistId);
-        await insertAlbum("The Joy of Motion", "2014", "/images/albums/animals-as-leaders--the-joy-of-motion.jpg", artistId);
-        await insertAlbum("Weightless", "2011", "/images/albums/animals-as-leaders--weightless.jpg", artistId);
-        await insertAlbum("Animals as Leaders", "2009", "/images/albums/animals-as-leaders--animals-as-leaders.jpg", artistId);
+        await insertAlbum("The Madness of Many", "2016", "/images/albums/animals-as-leaders--the-madness-of-many.jpg", artistId, "13jTvLPx2N9JbLOmq4yYQW");
+        await insertAlbum("The Joy of Motion", "2014", "/images/albums/animals-as-leaders--the-joy-of-motion.jpg", artistId, "3BfAgyF1AdYKaOO7EBoDw4");
+        await insertAlbum("Weightless", "2011", "/images/albums/animals-as-leaders--weightless.jpg", artistId, "7IoPLwGpntUE7VaEXEU67i");
+        await insertAlbum("Animals as Leaders", "2009", "/images/albums/animals-as-leaders--animals-as-leaders.jpg", artistId, "1BRtQtljRJIxroJXI20K39");
         await insertImage("/images/artists/Animals-As-Leaders/animals-as-leaders-1.jpg", artistId);
         await insertImage("/images/artists/Animals-As-Leaders/animals-as-leaders-2.jpg", artistId);
         await insertImage("/images/artists/Animals-As-Leaders/animals-as-leaders-3.jpg", artistId);
