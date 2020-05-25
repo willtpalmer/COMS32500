@@ -56,9 +56,11 @@ cleanDatabase();
 
 app.all('/', async(req, res) => {
     if (req.method === 'GET') {
-        //res.status(OK).sendFile(__dirname + '/public/index.html');
-        res.render('index', {
-            test: "OUTOUT"
+        let artists = await getArtists();
+        let name = artists[0].name;
+        console.log(artists);
+        res.status(OK).render('main', {
+            artists: artists
         });
     } else if (req.method === 'POST') {
 

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Artist Page</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="stylesheets/bandstyle.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+</head>
+    
+<body>
+
+
+<div class="container-fluid bg-dark text-white" id="discography">
+    <h1 class="display-4 text-center">Browse Local Artists</h1>
+    <div class="card-deck" id="deck">
+    </div>
+</div>
+
+<script>
+    let deck = document.getElementById("deck");
+    let card, divContent, divIcons, img, h;
+    <% for(let j=0; j<artists.length; j++) { %>
+        divIcons = document.createElement("div");
+        divIcons.className = "icon-block";
+        divIcons.innerHTML = "<a href=\"https://open.spotify.com/artist/4vGrte8FDu062Ntj0RsPiZ?si=Unc4T52RRlyQXtodn9-uMA\"><i class=\"fa fa-spotify\"></i></a><a href=\"twitter.com/polyphia\"> <i class=\"fa fa-twitter\"></i></a><a href=\"https://www.instagram.com/polyphia\"> <i class=\"fa fa-instagram\"></i></a>";
+
+        h = document.createElement("h2");
+        h.innerHTML = "<%= artists[j].name.replace(/-/g," ") %>"+"<small>Progressive Metal</small>";
+
+        divContent = document.createElement('div');
+        divContent.className = "card-content";
+        divContent.appendChild(h);
+        divContent.appendChild(divIcons);
+
+        img = document.createElement('img');
+        img.className = "card-img";
+        img.src = "<%= artists[j].imageURL %>";
+        img.alt = "profile-image";
+        img.className = "profile";
+
+        card = document.createElement('div');
+        card.className = "card profile-card-1";
+        card.appendChild(img);
+        card.appendChild(divContent);
+
+        deck.appendChild(card);
+
+    <%}%>
+
+</script>
+    
+</body>
+</html>
