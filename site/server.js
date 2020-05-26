@@ -188,16 +188,21 @@ app.post('/upload/:artistName/album', uploadAlbum.single('albumimage'), async(re
     if (artist !== undefined) {
         console.log(req.body.albumName);
         let path = "/images/albums/"+req.params.artistName+"--"+req.body.albumName.replace(/ /g,"-");
-        let spotURL = "";
-        try{
-            spotURL = new URL(req.body.spotifyLink);
+        let spotURL = req.body.spotifyLink;
+        if(spotURL!="") {
+            try{
+                spotURL = new URL(req.body.spotifyLink);
+            }
+            catch (e) {
+                res.send("Bad spotify URL")
+            };
         }
-        catch (e) {
-            res.send("Bad spotify URL")
-        };
         if(spotURL) {
             let spotify = spotURL.pathname.replace("/album/", "");
             let albumId = await insertAlbum(req.body.albumName, req.body.releaseYear, path, artist.id, spotify);
+            res.status(OK).redirect("/artists/"+req.params.artistName+"/edit");
+        } else if(spotURL =="") {
+            let albumId = await insertAlbum(req.body.albumName, req.body.releaseYear, path, artist.id, spotURL);
             res.status(OK).redirect("/artists/"+req.params.artistName+"/edit");
         }
         if(req.file) {

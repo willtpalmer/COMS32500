@@ -198,6 +198,9 @@ validateAlbumName = (albumName) => {
 
 validateSpotifyLink = (spotify)=> {
     try {
+        if(spotify == ""){
+            return true;
+        }
         let spotURL = new URL(spotify);
         if (spotURL.host!="open.spotify.com"){
             alert("Not a valid Spotify link");
