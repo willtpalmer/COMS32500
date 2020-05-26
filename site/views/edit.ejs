@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Artist Page</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../stylesheets/bandstyle.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+</head>
+    
+<body>
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container-fluid bg-dark">
+<div class="row flex-lg-nowrap">
+
+
+<div class="card bg-dark text-white card-form fill">
+    <div class="card-body">
+        <div class="e-profile">
+            <div class="row">
+                <div class="col-12 col-sm-auto mb-3">
+                    <div class="mx-auto" style="width: 140px;">
+                        <img src="<%= artist.imageURL %>" class="thing">
+                    </div>
+                </div>
+                <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
+                    <div class="text-center text-sm-left mb-2 mb-sm-0">
+                        <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap"><%= artist.name.replace(/-/g," ") %></h4>
+                        <p class="mb-0"><%= artist.genre %></p>
+                        <div class="mt-2">
+                            <label class="btn btn-primary btn-file" type="button" id="profilebutton">
+                            <i class="fa fa-fw fa-camera"></i>
+                            <span>Change Photo</span>
+                            <input id="artistImage" type="file" style="display: none;">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form class="form" novalidate="" action="<%= '/artists/'+artist.name %>" method="POST">
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Genre</label>
+                                    <input class="form-control" type="text" name="genre" value="<%= artist.genre %>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <div class="form-group">
+                                    <label>About</label>
+                                    <textarea class="form-control" rows="5" name="bio"><%= artist.biography %></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col d-flex justify-content-end">
+                    <button class="btn btn-primary" type="submit" id="biobutton">Save Changes</button>
+                    </div>
+                </div>
+            </form>
+
+            <form class="form" novalidate="" action="<%= '/upload/'+artist.name+'/album' %>" enctype=multipart/form-data method="POST">
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Album Name</label>
+                                    <input class="form-control" type="text" name="albumName" placeholder="Album Name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Release Year</label>
+                                    <input class="form-control" type="text" name="releaseYear" placeholder="Release Year">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <div class="form-group">
+                                    <label>Spotify Link</label>
+                                    <input class="form-control" type="text" name="spotifyLink" placeholder="Spotify Link">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <div class="custom-file mb-3">
+                                    <input type="file" class="custom-file-input" id="albumcover" name="albumimage">
+                                    <label class="custom-file-label" for="albumcover">Upload Album Art</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col d-flex justify-content-end">
+                        <button class="btn btn-primary" type="submit" id="albumbutton">Upload Album</button>
+                    </div>
+                </div>
+            </form>
+
+
+            <form class="form" novalidate="" action="<%= '/upload/'+artist.name+'/image' %>" enctype=multipart/form-data method="POST">
+                <label>Upload Photo To Gallery</label>
+                <div class="row">
+                    <div class="col">
+                        <div class="custom-file mb-3">
+                            <input type="file" class="custom-file-input" id="artistphoto" name="artistphoto" >
+                            <label class="custom-file-label" for="albumcover">Upload Photo</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col d-flex justify-content-end">
+                        <button class="btn btn-primary" type="submit" id="photobutton">Upload Photo</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!--
+<script>
+$(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+</script>
+-->
+
+<script>
+$(document).on('change', ':file', function() {
+    var input = $(this),
+
+        file = input.get(0).files[0];
+        let fileID = input[0].id;
+        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+    input.trigger('fileselect', [numFiles, label, file, fileID]);
+});    
+</script>
+    
+<script>
+$(document).ready( function() {
+    $(':file').on('fileselect', function(event, numFiles, label, file, fileID) {
+        console.log(numFiles);
+        console.log(label);
+        console.log(file);
+
+        if(fileID == "artistImage") {
+            let formData = new FormData();
+            formData.append("photo", file);
+            formData.append("artistName", "<%= artist.name %>")
+            fetch('/upload/artistPhoto/'+"<%= artist.name %>", {method: "POST", body: formData})
+                .then(() => {
+                    window.location.reload(true);
+                });
+        }
+
+
+
+    });
+});    
+</script>
+    
+</div>
+</div>
+    
+</body>
+</html>

@@ -10,6 +10,7 @@ img {
     opacity: 0.8;
 }
 
+
 .overlay {
     position: absolute;
     top: 0;
@@ -39,13 +40,12 @@ img {
 
 
 ul.nav-pills {
-    top: 10px;
     position: fixed;
 }
 
 
 #about {
-    padding-top: 5em;
+    padding-top: 6em;
     padding-left: 2em;
     padding-right: 2em;
     padding-bottom: 1em;
@@ -79,11 +79,42 @@ ul.nav-pills {
     opacity: 0.7;
 }
 
+.profile-card-1:hover {
+    background: #252526
+}
+
 /* 100% Image Width on Smaller Screens */
 @media only screen and (max-width: 700px){
   .modal-content {
     width: 100%;
   }
+}
+
+/*
+iframe {
+	height: 40px;
+	min-height : 40px;
+}
+*/
+
+.popover {
+    max-width: 400px;
+/*    border-width: 0px;*/
+/*    visibility: hidden*/
+    background-color: rgba(0,0,0,0);
+    border-color: rgba(0,0,0,0);
+}
+
+/*
+.popover>.arrow {
+    border-width: 0px;
+}
+*/
+
+
+
+.nav {
+    background-color: black
 }
 
 *:hover{
@@ -93,10 +124,10 @@ ul.nav-pills {
 section{
     float:left;
     width:100%;
-    background: #fff;  /* fallback for old browsers */
+    background: #fff;   fallback for old browsers 
     padding:30px 0;
 }
-//h1{float:left; width:100%; margin-bottom:30px; font-size: 14px;}
+/*h1{float:left; width:100%; margin-bottom:30px; font-size: 14px;}*/
 h1 span{font-family: 'Libre Baskerville', serif; display:block; font-size:45px; text-transform:none; margin-bottom:20px; margin-top:30px; font-weight:700}
 h1 a{color:#131313; font-weight:bold;}
 
@@ -162,5 +193,57 @@ h1 a{color:#131313; font-weight:bold;}
 }
 
 
+a:link
+{
+/*   color: #fb3f00;*/
+   text-decoration: none;
+}
+a:visited
+{
+/*   color: #fb3f00;*/
+   text-decoration: none;
+}
+a:hover
+{
+/*   color: #fb3f00;*/
+   text-decoration: none;
+}
+a:active
+{
+/*   color: #fb3f00;*/
+   text-decoration: none;
+}
+
+.fill {
+    min-height: 100vh;
+    height: 100%;
+}
+
+.thing {
+    border-radius: 50%;
+    position: relative;
+/*    bottom: 50%;*/
+/*    left: 50%;*/
+    width: 144px;
+    height: 144px;
+    opacity: 1;
+    overflow: hidden;
+    box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 1);
+}
 
 
+
+
+.card-form {
+    width: 100%
+}
+
+.form-control {
+    background-color: black
+}
+
+
+.custom-file-label {
+    background: black
+}

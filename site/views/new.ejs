@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Create a new Artist page</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="stylesheets/bandstyle.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+</head>
+    
+<body>
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container-fluid bg-dark">
+<div class="row flex-lg-nowrap">
+
+
+<div class="card bg-dark text-white card-form fill">
+    <div class="card-body">
+        <div class="e-profile">
+            <form class="form" novalidate="" action="/artists" method="POST">
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Band Name</label>
+                                    <input class="form-control" type="text" name="bandname" placeholder="Band Name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Genre</label>
+                                    <input class="form-control" type="text" name="genre" placeholder="Genre">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <div class="form-group">
+                                    <label>About</label>
+                                    <textarea class="form-control" rows="5" name="bio" placeholder="Bio"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col d-flex justify-content-end">
+                    <button class="btn btn-primary" type="submit" id="biobutton">Add Artist</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--
+<script>
+$(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+</script>
+-->
+
+<script>
+$(document).on('change', ':file', function() {
+    var input = $(this),
+
+        file = input.get(0).files[0];
+        let fileID = input[0].id;
+        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+    input.trigger('fileselect', [numFiles, label, file, fileID]);
+});    
+</script>
+    
+<script>
+$(document).ready( function() {
+    $(':file').on('fileselect', function(event, numFiles, label, file, fileID) {
+        console.log(numFiles);
+        console.log(label);
+        console.log(file);
+
+        if(fileID == "artistImage") {
+            let formData = new FormData();
+            formData.append("photo", file);
+            fetch('/upload/artistPhoto', {method: "POST", body: formData});
+        }
+
+
+
+    });
+});    
+</script>
+    
+</div>
+</div>
+    
+</body>
+</html>

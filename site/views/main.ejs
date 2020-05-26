@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Artist Page</title>
+<title>Home</title>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
     
@@ -26,11 +26,12 @@
 <body>
 
 
-<div class="container-fluid bg-dark text-white" id="discography">
+<div class="container-fluid bg-dark text-white fill" id="discography">
     <h1 class="display-4 text-center">Browse Local Artists</h1>
     <div class="card-deck" id="deck">
     </div>
 </div>
+    
 
 <script>
     let deck = document.getElementById("deck");
@@ -41,7 +42,8 @@
         divIcons.innerHTML = "<a href=\"https://open.spotify.com/artist/4vGrte8FDu062Ntj0RsPiZ?si=Unc4T52RRlyQXtodn9-uMA\"><i class=\"fa fa-spotify\"></i></a><a href=\"twitter.com/polyphia\"> <i class=\"fa fa-twitter\"></i></a><a href=\"https://www.instagram.com/polyphia\"> <i class=\"fa fa-instagram\"></i></a>";
 
         h = document.createElement("h2");
-        h.innerHTML = "<%= artists[j].name.replace(/-/g," ") %>"+"<small>Progressive Metal</small>";
+        h.innerHTML = "<a href='Artists/<%= artists[j].name %>'><%= artists[j].name.replace(/-/g," ") %>"+"<small>"+"<%= artists[j].genre %>"+"</small></a>";
+        
 
         divContent = document.createElement('div');
         divContent.className = "card-content";
@@ -64,6 +66,8 @@
     <%}%>
 
 </script>
+    
+<div class="container-fluid bg-dark text-white"></div>
     
 </body>
 </html>

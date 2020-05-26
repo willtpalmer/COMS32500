@@ -6,7 +6,8 @@ async function initialiseArtistsTable() {
 									id INTEGER PRIMARY KEY,\
 									name TEXT NOT NULL UNIQUE,\
 									imageURL TEXT,\
-									biography TEXT \
+									biography TEXT, \
+									genre TEXT\
 								)');
 	return new Promise(resolve=>{
 		prepSQL.run((e)=>{
@@ -27,12 +28,12 @@ async function dropArtistsTable() {
 	});
 }	
 
-async function insertArtist(name, imageURL, bio) {
+async function insertArtist(name, imageURL, bio, genre="") {
 	const db = await getDatabase();
-	const prepSQL = db.prepare('INSERT INTO artists(name, imageURL, biography)\
-				 				VALUES(?,?,?)');
+	const prepSQL = db.prepare('INSERT INTO artists(name, imageURL, biography, genre)\
+				 				VALUES(?,?,?,?)');
 	return new Promise(resolve=>{
-		prepSQL.run([name, imageURL, bio], (e)=>{
+		prepSQL.run([name, imageURL, bio, genre], (e)=>{
     		if (e) console.log(e.message);
     		else resolve(console.log('A row has been inserted into the artists table'));
   		});
@@ -63,6 +64,33 @@ async function getArtist(artistName) {
   	});
 }
 
+async function changeArtistImage(artistName, imageURL) {
+	const db = await getDatabase();
+	const prepSQL = db.prepare('UPDATE artists\
+				 				SET imageURL = ?\
+				 				WHERE name = ?');
+	return new Promise(resolve=>{
+		prepSQL.run(imageURL, artistName, (e)=>{
+    		if (e) console.log(e.message);
+    		else resolve(console.log(artistName+' image URL updated'));
+  		});
+  	});
+}
+
+
+async function updateArtist(id, biography, genre) {
+	const db = await getDatabase();
+	const prepSQL = db.prepare('UPDATE artists\
+				 				SET biography = ?, genre = ?\
+				 				WHERE id = ?');
+	return new Promise(resolve=>{
+		prepSQL.run(biography, genre, id, (e)=>{
+    		if (e) console.log(e.message);
+    		else resolve(console.log(id+" biography and genre updated"));
+  		});
+  	});
+}
+
 
 
 
@@ -73,4 +101,6 @@ module.exports = {
 	dropArtistsTable,
 	getArtists,
 	getArtist,
+	changeArtistImage,
+	updateArtist
 };
