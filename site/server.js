@@ -110,8 +110,13 @@ app.all('/artists', async(req, res) => {
     if (req.method === 'GET') {
     } else if (req.method === 'POST') {
         let name = req.body.bandname.replace(/ /g,"-");
-        await insertArtist(name, "/images/icons/blank.jpg", req.body.bio, req.body.genre);
-        res.status(OK).redirect("/artists/"+name+"/edit");
+        let insert = await insertArtist(name, "/images/icons/blank.jpg", req.body.bio, req.body.genre);
+        if (insert ==0) {
+            res.status(Error).send("Band name taken, please try a different name");
+        }
+        else {
+            res.status(OK).redirect("/artists/"+name+"/edit");
+        }
     } else if (req.method === 'PUT') {
         
     }

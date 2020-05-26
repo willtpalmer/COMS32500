@@ -82,7 +82,7 @@
                 </div>
             </form>
 
-            <form class="form" novalidate="" action="<%= '/upload/'+artist.name+'/album' %>" enctype=multipart/form-data method="POST">
+            <form class="form" novalidate="" onsubmit="return validateAlbum(this)" action="<%= '/upload/'+artist.name+'/album' %>" enctype=multipart/form-data method="POST">
                 <div class="row">
                     <div class="col">
                         <div class="row">
@@ -127,7 +127,7 @@
             </form>
 
 
-            <form class="form" novalidate="" action="<%= '/upload/'+artist.name+'/image' %>" enctype=multipart/form-data method="POST">
+            <form class="form" novalidate="" onsubmit="return validatePhoto(this)" action="<%= '/upload/'+artist.name+'/image' %>" enctype=multipart/form-data method="POST">
                 <label>Upload Photo To Gallery</label>
                 <div class="row">
                     <div class="col">
@@ -158,6 +158,93 @@ $(".custom-file-input").on("change", function() {
 -->
 
 <script>
+
+validatePhoto = (form) => {
+    let image = form.artistphoto.files[0];
+    if (image == undefined) {
+        alert("Please select a photo to upload");
+        return false;
+    }
+    if(image.type!="image/jpeg" && image.type!="image/png") {
+        alert("Photo must be a valid jpg or png image");
+        return false;
+    }
+    return true;
+}
+
+validateAlbum = (form) => {
+    let albumName = form.albumName.value;
+    let releaseYear = form.releaseYear.value;
+    let spotifyLink = form.spotifyLink.value;
+    if(validateAlbumName(albumName)&&validateSpotifyLink(spotifyLink)&&validateAlbumCover(form.albumimage.files[0])&&validateYear(releaseYear)) {
+        console.log("TRUE");
+        return true
+    }
+    else{
+        console.log("FALSE");
+        return false
+    }
+}
+
+validateAlbumName = (albumName) => {
+    if (albumName!="") {
+        return true;
+    }
+    else {
+        alert("Album name can not be empty");
+        return false
+    }
+}
+
+validateSpotifyLink = (spotify)=> {
+    try {
+        let spotURL = new URL(spotify);
+        if (spotURL.host!="open.spotify.com"){
+            alert("Not a valid Spotify link");
+            return false;
+        }
+        if (!spotURL.pathname.startsWith("/album/")) {
+            alert("Not a valid Spotify link");
+            return false;
+        }
+    }
+    catch(e) {
+        alert("Spotify link is not a valid URL");
+        return false;
+    }
+    return true;
+}
+
+validateAlbumCover = (image) => {
+    if (image == undefined) {
+        alert("Please select an album cover image");
+        return false;
+    }
+    if(image.type!="image/jpeg" && image.type!="image/png") {
+        alert("Please select a png or jpg image for the album cover");
+        return false;
+    }
+    return true;
+}
+
+validateYear = (year) => {
+
+    let currentYear = new Date().getFullYear();
+    if(!(year == parseInt(year, 10))) {
+        alert("Please enter a whole number year")
+        return false;
+    }
+    if(year.length!=4) {
+        alert("Year must be 4 digits long");
+        return false;
+    }
+    if(!(year >= 1920 && year <= currentYear)) {
+        alert("Please enter a year between 1920 and "+currentYear);
+        return false;
+    }
+    return true;
+}
+
 $(document).on('change', ':file', function() {
     var input = $(this),
 
@@ -172,18 +259,17 @@ $(document).on('change', ':file', function() {
 <script>
 $(document).ready( function() {
     $(':file').on('fileselect', function(event, numFiles, label, file, fileID) {
-        console.log(numFiles);
-        console.log(label);
-        console.log(file);
-
         if(fileID == "artistImage") {
             let formData = new FormData();
             formData.append("photo", file);
             formData.append("artistName", "<%= artist.name %>")
-            fetch('/upload/artistPhoto/'+"<%= artist.name %>", {method: "POST", body: formData})
-                .then(() => {
-                    window.location.reload(true);
-                });
+            if(file.type=="image/jpeg" || file.type=="image/png") {
+                fetch('/upload/artistPhoto/'+"<%= artist.name %>", {method: "POST", body: formData})
+                    .then(() => {
+                        window.location.reload(true);
+                    });
+            }
+            else alert("Please choose a valid png or jpg image");
         }
 
 

@@ -34,7 +34,10 @@ async function insertArtist(name, imageURL, bio, genre="") {
 				 				VALUES(?,?,?,?)');
 	return new Promise(resolve=>{
 		prepSQL.run([name, imageURL, bio, genre], (e)=>{
-    		if (e) console.log(e.message);
+    		if (e) {
+    			console.log(e.message);
+    			resolve(0);
+    		}
     		else resolve(console.log('A row has been inserted into the artists table'));
   		});
   	});
